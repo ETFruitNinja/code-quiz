@@ -131,6 +131,10 @@ var option3El = document.createElement("button");
 var option4El = document.createElement("button");
 
 var scoreEl = document.createElement("h2");
+var submitInfo = document.createElement("h3");
+var submissionEl = document.createElement("form");
+var initialsEl = document.createElement("textarea");
+var scoreSubmitBtn = document.createElement("button");
 
 // initialize time and score
 var timeInterval;
@@ -141,9 +145,11 @@ var score = 0;
 var questionNumber = -1;
 
 function endQuiz() {
+    // clear timer, set quiz screen elements to blank
     clearInterval(timeInterval);
     quizScreen.textContent = "";
     timerEl.textContent = "";
+    feedbackEl.textContent = "";
     endScreen.appendChild(scoreEl);
     scoreEl.textContent = "Your score was: " + score;
 
@@ -151,6 +157,27 @@ function endQuiz() {
     // prompt user for initials
     // input initials into local storage
     // show leaderboard
+    submitInfo.textContent = "Type your initials to save your score.";
+    endScreen.appendChild(submitInfo);
+    endScreen.appendChild(submissionEl);
+    submissionEl.appendChild(initialsEl);
+    scoreSubmitBtn.textContent = "Submit";
+    submissionEl.appendChild(scoreSubmitBtn);
+
+    // code for saving score to local storage
+    scoreSubmitBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        
+        var leaderboard = {
+            initials: initialsEl.value.trim(),
+            score: score
+        };
+        
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+    });
+
+    // function to go to leaderboard page
+    // for loop to GET all items currently in local storage, then to APPEND to the list, then SET the new list
 }
 
 // determines whether to add to score or remove seconds from clock after selecting an option
