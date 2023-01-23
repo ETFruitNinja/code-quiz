@@ -110,7 +110,7 @@ var questionList = [
         option2: 'option 2',
         option3: 'option 3',
         option4: 'option 4',
-        answer: 4
+        answer: 2
     },
 ];
 
@@ -119,41 +119,59 @@ var startBtn = document.querySelector("#start");
 var startScreen = document.querySelector("#start-screen");
 var quizScreen = document.querySelector("#quiz-content");
 var timerEl = document.querySelector("#timer");
+var feedbackEl = document.querySelector("#feedback");
+var endScreen = document.querySelector("#end-screen");
 
 var questionEl = document.createElement("h2");
-var optionList = document.createElement("ol");
+var optionList = document.createElement("section");
 
 var option1El = document.createElement("button");
 var option2El = document.createElement("button");
 var option3El = document.createElement("button");
 var option4El = document.createElement("button");
 
+var scoreEl = document.createElement("h2");
+
 // initialize time and score
+var timeInterval;
 var timeLeft = 60;
 var score = 0;
 
 // initialize question number
-var questionNumber = 0;
+var questionNumber = -1;
 
 function endQuiz() {
+    clearInterval(timeInterval);
     quizScreen.textContent = "";
+    timerEl.textContent = "";
+    endScreen.appendChild(scoreEl);
+    scoreEl.textContent = "Your score was: " + score;
+
+    // leaderboard:
+    // prompt user for initials
+    // input initials into local storage
+    // show leaderboard
 }
 
 // determines whether to add to score or remove seconds from clock after selecting an option
 function calculateScore(userChoice) {
+    console.log("chosen " + userChoice)
     // if correct answer
         // add 1 to score
     // else 
         // subtract 5 seconds from clock
     if (userChoice === questionList[questionNumber].answer) {
         score++;
+        feedbackEl.textContent = "Correct!";
     } else {
         timeLeft = timeLeft - 5;
+        feedbackEl.textContent = "Incorrect.";
     }
 }
 
-function nextQuestion(changeNumber) {
-    questionNumber = questionNumber + changeNumber;
+function nextQuestion() {
+    questionNumber = questionNumber + 1;
+    console.log(questionNumber);
     if (questionNumber >= questionList.length) {
         // ends quiz when you've exhausted entire question list
         endQuiz();
@@ -165,27 +183,9 @@ function nextQuestion(changeNumber) {
         option3El.textContent = questionList[questionNumber].option3;
         option4El.textContent = questionList[questionNumber].option4;
     }
-
-    // listens for clicks among any of the options
-    optionList.addEventListener("click", function(event) {
-        var element = event.target;
-        // calculate score/time from each answer choice
-        if (element.matches(option1El)) {
-            calculateScore(1);
-        } else if (element.matches(option2El)) {
-            calculateScore(2);
-        } else if (element.matches(option3El)) {
-            calculateScore(3);
-        } else if (element.matches(option4El)) {
-            calculateScore(4);
-        }
-        // add one to the question number and switch to next question
-        nextQuestion(1);
-    })
 }
 
-// 
-
+// function that sets up the quiz
 function runQuiz() {
     // hide the start screen content
     startScreen.textContent="";
@@ -197,6 +197,9 @@ function runQuiz() {
     // var optionList = document.createElement("ol");
     quizScreen.appendChild(optionList);
 
+    // show timer
+    timerEl.textContent = "Time Remaining: " + timeLeft;
+
     // var option1El = document.createElement("button");
     // var option2El = document.createElement("button");
     // var option3El = document.createElement("button");
@@ -206,21 +209,38 @@ function runQuiz() {
     optionList.appendChild(option3El);
     optionList.appendChild(option4El);
 
+    // listens for clicks among any of the options
+    optionList.addEventListener("click", function(event) {
+        var element = event.target;
+        console.log("answer clicekd")
+        // calculate score/time from each answer choice
+        if (element === option1El) {
+            calculateScore(1);
+        } else if (element === option2El) {
+            calculateScore(2);
+        } else if (element === option3El) {
+            calculateScore(3);
+        } else if (element === option4El) {
+            calculateScore(4);
+        }
+        // add one to the question number and switch to next question
+        nextQuestion();
+    });
+
     // timer function
-    var timeInterval = setInterval(function() {
+    timeInterval = setInterval(function() {
         if (timeLeft > 0) {
             timerEl.textContent = "Time Remaining: " + timeLeft;
             timeLeft--;
         } else {
             timerEl.textContent = "Time's Up!";
-            clearInterval(timeInterval);
             // function to show score screen
             endQuiz();
         }
     }, 1000);
 
     // click button for next question event
-    nextQuestion(0);
+    nextQuestion();
 }
 
 // quiz begins when you click on the start button
