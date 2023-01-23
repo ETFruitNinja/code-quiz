@@ -1,0 +1,24 @@
+:root {
+    --athensgray: #ECEDF1;
+    --sanmarino: #49629E;
+    --lightblue: #c4dbeb;
+}
+
+body {
+    background-color: var(--lightblue);
+    color: var(--sanmarino);
+    font-family: Arial;
+    font-style: bold;
+    text-align: center;
+}
+
+section {
+    display: block;
+}
+
+button {
+    font-size: 30px;
+    background-color: var(--sanmarino);
+    color: var(--athensgray);
+    padding: 10px 50px;
+}
