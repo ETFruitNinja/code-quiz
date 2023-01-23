@@ -13,12 +13,31 @@ body {
 }
 
 section {
-    display: block;
+    display: flex;
+    flex-direction: column;
+}
+
+summary {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 button {
+    text-align: center;
     font-size: 30px;
     background-color: var(--sanmarino);
     color: var(--athensgray);
     padding: 10px 50px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 500px;
+}
+
+textarea {
+    font-size: 40px;
+    text-align: center;
 }
