@@ -15,52 +15,52 @@
 var questionList = [
     // question 1
     {
-        question: 'question 1',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 1
+        question: 'Which of the following is the least aggressive grade for prostate cancer?',
+        option1: 'Gleason 1+1=2',
+        option2: 'Gleason 3+3=6',
+        option3: 'Gleason 3+4=7',
+        option4: 'Gleason 5+4=9',
+        answer: 2
     },
 
     // question 2
     {
-        question: 'question 2',
-        option1: 'option 5',
-        option2: 'option 6',
-        option3: 'option 7',
-        option4: 'option 8',
+        question: 'Which treatment option for prostate cancer has the lowest side effect profile?',
+        option1: 'Prostatectomy',
+        option2: 'High Intensity Focused Ultrasound',
+        option3: 'External Beam Therapy',
+        option4: 'Brachytherapy',
         answer: 2
     },
 
     // question 3
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 3
+        question: 'Which medication is NOT used to treat erectile dysfunction?',
+        option1: 'Tamsulosin',
+        option2: 'Sildenafil',
+        option3: 'Cialis',
+        option4: 'Trimix',
+        answer: 1
     },
 
     // question 4
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
+        question: 'Which of the following is least likely to cause hematuria (blood in urine)?',
+        option1: 'Bladder cancer',
+        option2: 'Prostatitis',
+        option3: 'Kidney stones',
+        option4: 'Kidney cancer',
         answer: 4
     },
 
     // question 5
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 4
+        question: 'Which of the following is the gold standard treatment for recurrent high-grade non-muscle invasive bladder cancer?',
+        option1: 'Active surveillance',
+        option2: 'Induction BCG',
+        option3: 'Radical cystectomy',
+        option4: 'Adjuvant chemotherapy followed by radical cystectomy',
+        answer: 3
     },
 
     // question 6
@@ -75,12 +75,12 @@ var questionList = [
 
     // question 7
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 4
+        question: 'Which of the following is NOT a tumor marker that is monitored in patients with testicular cancer?',
+        option1: 'LDH',
+        option2: 'PSA',
+        option3: 'AFP',
+        option4: 'b-HCG',
+        answer: 2
     },
 
     // question 8
@@ -105,14 +105,17 @@ var questionList = [
 
     // question 10
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 2
+        question: 'Which of the following is not a lower urinary tract symptom caused by benign prostatic hyperplasia?',
+        option1: 'Urgency',
+        option2: 'Nocturia (waking up at night to urinate)',
+        option3: 'Retrograde ejaculation',
+        option4: 'Straining to void',
+        answer: 3
     },
 ];
+
+// leaderboard
+var leaderboard = [];
 
 // HTML elements
 var startBtn = document.querySelector("#start");
@@ -121,6 +124,7 @@ var quizScreen = document.querySelector("#quiz-content");
 var timerEl = document.querySelector("#timer");
 var feedbackEl = document.querySelector("#feedback");
 var endScreen = document.querySelector("#end-screen");
+var scoreScreen = document.querySelector("#score-screen")
 
 var questionEl = document.createElement("h2");
 var optionList = document.createElement("section");
@@ -135,6 +139,9 @@ var submitInfo = document.createElement("h3");
 var submissionEl = document.createElement("form");
 var initialsEl = document.createElement("textarea");
 var scoreSubmitBtn = document.createElement("button");
+
+var leaderboardEl = document.createElement("ul");
+var clearBtn = document.createElement("button");
 
 // initialize time and score
 var timeInterval;
@@ -168,21 +175,62 @@ function endQuiz() {
     scoreSubmitBtn.addEventListener("click", function(event) {
         event.preventDefault();
         
-        var leaderboard = {
+        var userInfo = {
             initials: initialsEl.value.trim(),
             score: score
         };
-        
-        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-    });
 
-    // function to go to leaderboard page
-    // for loop to GET all items currently in local storage, then to APPEND to the list, then SET the new list
+        console.log(userInfo);
+        // retrieve leaderboard from local storage
+        leaderboard = localStorage.getItem("leaderboard");
+        leaderboard = JSON.parse(leaderboard);
+
+        // add new score to retrieved list + sort
+        leaderboard.push(userInfo);
+        
+        // add new list to local storage
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+        // display leaderboard page
+        showLeaderboard();
+    });
 }
+
+// leaderboard display function
+function showLeaderboard() {
+    endScreen.textContent = "";
+    scoreScreen.appendChild(leaderboardEl);
+    leaderboardEl.textContent = "High Scores";
+    var scoresList = localStorage.getItem("leaderboard");
+    scoresList = JSON.parse(scoresList);
+
+    // for loop to add each score to list
+    for (var i = 0; i < scoresList.length; i++) {
+        var score = document.createElement("li");
+        leaderboardEl.appendChild(score);
+        score.textContent = scoresList[i].initials + ": " + scoresList[i].score;
+    }
+
+    // add clear button to list of scores
+    scoreScreen.appendChild(clearBtn);
+    clearBtn.textContent = "Clear scores";
+
+    // function to clear leaderboard
+    clearBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        
+        //clears leaderboard content in local storage
+        localStorage.setItem("leaderboard", []);
+
+        // remove all items on displayed leaderboard
+        leaderboardEl.textContent = "High Scores";
+    });
+}
+
 
 // determines whether to add to score or remove seconds from clock after selecting an option
 function calculateScore(userChoice) {
-    console.log("chosen " + userChoice)
+    // console.log("chosen " + userChoice)
     // if correct answer
         // add 1 to score
     // else 
