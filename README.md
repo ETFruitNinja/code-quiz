@@ -16,7 +16,7 @@ Click on the Start button to start the quiz. Click on the button for answer choi
 https://etfruitninja.github.io/timed-urology-quiz/
 
 ## Screenshot
-![alt=urology-quiz-website](./assets/screenshot.PNG)
+![alt=urology-quiz-website](./assets/images/screenshot.PNG)
 
 ## Credits
 

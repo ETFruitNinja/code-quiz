@@ -65,12 +65,12 @@ var questionList = [
 
     // question 6
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 4
+        question: 'Which of the following is not a side effect associated with radical prostatectomy?',
+        option1: 'Stress incontinence',
+        option2: 'Urge incontinence',
+        option3: 'Erectile dysfunction',
+        option4: 'Loss of ejaculate fluid',
+        answer: 2
     },
 
     // question 7
@@ -85,21 +85,21 @@ var questionList = [
 
     // question 8
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
-        answer: 4
+        question: 'What is the most common site of metastasis for testicular cancer?',
+        option1: 'Mediastinal lymph nodes',
+        option2: 'Retroperitoneal lymph nodes',
+        option3: 'Pelvic lymph nodes',
+        option4: 'Cervical lymph nodes',
+        answer: 2
     },
 
     // question 9
     {
-        question: 'question',
-        option1: 'option 1',
-        option2: 'option 2',
-        option3: 'option 3',
-        option4: 'option 4',
+        question: 'Which renal mass would be most amenable to a partial resection?',
+        option1: 'A large endophytic mass',
+        option2: 'A large exophytic mass',
+        option3: 'A small endophytic mass',
+        option4: 'A small exophytic mass',
         answer: 4
     },
 
@@ -183,7 +183,7 @@ function endQuiz() {
         console.log(userInfo);
         // retrieve leaderboard from local storage
         leaderboard = localStorage.getItem("leaderboard");
-        leaderboard = JSON.parse(leaderboard);
+        leaderboard = JSON.parse(leaderboard) || [];
 
         // add new score to retrieved list + sort
         leaderboard.push(userInfo);
@@ -220,7 +220,7 @@ function showLeaderboard() {
         event.preventDefault();
         
         //clears leaderboard content in local storage
-        localStorage.setItem("leaderboard", []);
+        localStorage.setItem("leaderboard", JSON.stringify([]));
 
         // remove all items on displayed leaderboard
         leaderboardEl.textContent = "High Scores";
